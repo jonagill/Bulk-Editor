@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "com.jonagill.bulkeditor": {
+      "version": "file:com.jonagill.bulkeditor",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    }
+  }
+}

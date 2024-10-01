@@ -1,0 +1,17 @@
+{
+    "name": "BulkEditor.Editor",
+    "references": [
+        "GUID:43d14f4b85efe7f459e365594eddc6f9"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

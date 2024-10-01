@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "com.jonagill.bulkeditor": "file:com.jonagill.bulkeditor"
+   
+  }
+}
