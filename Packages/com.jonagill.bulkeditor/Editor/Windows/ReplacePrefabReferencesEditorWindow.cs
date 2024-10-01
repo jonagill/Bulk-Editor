@@ -20,7 +20,7 @@ namespace BulkEditor
     [Serializable]
     public class ReplacePrefabReferencesEditorWindow : EditorWindow
     {
-        [MenuItem("Tools/Bulk Editing/Prefabs/Replace Prefab References Window")]
+        [MenuItem("Tools/Bulk Editing/Prefabs/Windows/Replace Prefab References Window")]
         public static void ShowWindow()
         {
             ReplacePrefabReferencesEditorWindow wnd = GetWindow<ReplacePrefabReferencesEditorWindow>();

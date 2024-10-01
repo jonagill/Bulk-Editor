@@ -50,7 +50,7 @@ namespace BulkEditor
         [SerializeField] private bool _missingGameObjectsBecomeOverride = true;
         [SerializeField] private bool _nestedPrefabsNotMatchedRemainLinked = true;
 
-        [MenuItem("Tools/Bulk Editing/Prefabs/Convert To Prefab Instance Window")]
+        [MenuItem("Tools/Bulk Editing/Prefabs/Windows/Convert To Prefab Instance Window")]
         public static void ShowWindow()
         {
             ConvertToPrefabEditorWindow wnd = GetWindow<ConvertToPrefabEditorWindow>();
