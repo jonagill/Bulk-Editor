@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "com.jonagill.bulkeditor": "file:com.jonagill.bulkeditor"
-   
+    "com.jonagill.bulkeditor": "file:com.jonagill.bulkeditor",
+    "com.unity.ai.navigation": "1.1.5",
+    "com.unity.ide.visualstudio": "2.0.22"
   }
 }

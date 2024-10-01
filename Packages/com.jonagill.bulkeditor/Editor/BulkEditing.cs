@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Assertions;
 
 using Object = UnityEngine.Object;
 
@@ -230,8 +231,6 @@ namespace BulkEditor
         /// </summary>
         public static void RunFunctionOnAllPrefabs(string label, Func<string, GameObject, bool> function)
         {
-            
-
             var isDirty = false;
 
             var prefabsByDepth = new Dictionary<int, List<(string, GameObject)>>();
@@ -534,7 +533,123 @@ namespace BulkEditor
 
             return depth;
         }
-        
+
+        /// <summary>
+        /// Returns whether the target object is or is a child of the provided root
+        /// </summary>
+        public static bool IsGameObjectPartOfHierarchy(GameObject targetObject, GameObject root)
+        {
+            return targetObject == root || targetObject.transform.IsChildOf(root.transform);
+        }
+
+        /// <summary>
+        /// Given a target object and the root of its hierarchy, tries to find and return the corresponding object
+        /// with the same path inside the target hierarchy.
+        /// </summary>
+        public static bool TryGetMatchingGameObject(
+            GameObject targetObject,
+            GameObject fromHierarchyRoot,
+            GameObject toHierarchyRoot,
+            out GameObject matchingObject)
+        {
+            return TryGetMatchingGameObject(
+                targetObject,
+                fromHierarchyRoot,
+                toHierarchyRoot,
+                out matchingObject,
+                out _);
+        }
+
+        /// <summary>
+        /// Given a target object and the root of its hierarchy, tries to find and return the corresponding object
+        /// with the same path inside the target hierarchy.
+        /// </summary>
+        public static bool TryGetMatchingGameObject(
+            GameObject targetObject,
+            GameObject fromHierarchyRoot,
+            GameObject toHierarchyRoot,
+            out GameObject matchingObject,
+            out string path)
+        {
+            if (!IsGameObjectPartOfHierarchy(targetObject, fromHierarchyRoot))
+            {
+                Debug.LogError($"GameObject {targetObject} is not part of hierarchy {fromHierarchyRoot} and cannot be matched with.");
+                matchingObject = null;
+                path = default;
+                return false;
+            }
+
+            if (targetObject == fromHierarchyRoot)
+            {
+                matchingObject = toHierarchyRoot;
+                path = string.Empty;
+                return true;
+            }
+
+            // Get the relative path from the root to the target
+            path = targetObject.GetPathName(
+                includeScene: false,
+                includeRoot: false,
+                customRoot: fromHierarchyRoot.transform);
+
+
+            // Validate that GetPathName() actually gave us a compatible path
+            Assert.IsNotNull(fromHierarchyRoot.transform.Find(path));
+
+            var matchingTransform = toHierarchyRoot.transform.Find(path);
+
+            if (matchingTransform != null)
+            {
+                matchingObject = matchingTransform.gameObject;
+                return true;
+            }
+
+            matchingObject = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Given a target component and the root of its hierarchy, tries to find and return the corresponding component
+        /// with the same path inside the target hierarchy.
+        /// </summary>
+        public static bool TryGetMatchingComponent(
+            Component targetComponent,
+            Type componentType,
+            GameObject fromHierarchyRoot,
+            GameObject toHierarchyRoot,
+            out Component matchingComponent)
+        {
+            if (TryGetMatchingGameObject(
+                    targetComponent.gameObject,
+                    fromHierarchyRoot, toHierarchyRoot,
+                    out var matchingGameObject))
+            {
+                var validComponents = matchingGameObject.GetComponents(componentType);
+                if (validComponents.Length == 1)
+                {
+                    matchingComponent = validComponents[0];
+                    return true;
+                }
+
+                if (validComponents.Length == 0)
+                {
+                    Debug.LogWarning($"Found no {componentType.Namespace} components that match path {targetComponent.gameObject.GetPathName()} on prefab {toHierarchyRoot}");
+                }
+
+                if (validComponents.Length > 1)
+                {
+                    Debug.LogWarning($"Found multiple {componentType.Namespace} components that match path {targetComponent.gameObject.GetPathName()} on prefab {toHierarchyRoot} -- cannot pick one!");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Unable to find GameObject that matches path {targetComponent.gameObject.GetPathName()} on prefab {toHierarchyRoot}");
+            }
+
+            matchingComponent = null;
+            return false;
+        }
+
         private static bool PathBelongsToProject(string path)
         {
             if (!path.StartsWith(@"assets", StringComparison.InvariantCultureIgnoreCase))
