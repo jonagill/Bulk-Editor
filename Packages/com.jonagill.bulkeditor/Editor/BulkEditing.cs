@@ -7,6 +7,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
+using UnityInternalAccess.Editor;
 
 using Object = UnityEngine.Object;
 
@@ -416,11 +417,11 @@ namespace BulkEditor
                 var iterator = serializedObject.GetIterator();
                 while (iterator.Next(true))
                 {
-                    // if (!iterator.isArray && iterator.GetEnumType() == enumType)
-                    // {
-                    //     T enumValue = (T) iterator.GetEnumValue();
-                    //     processReferenceCallback?.Invoke(enumValue, obj);
-                    // }
+                    if (!iterator.isArray && iterator.GetEnumType() == enumType)
+                    {
+                        T enumValue = (T) iterator.GetEnumValue();
+                        processReferenceCallback?.Invoke(enumValue, obj);
+                    }
                 }
             }
 

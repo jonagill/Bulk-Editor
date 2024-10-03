@@ -1,7 +1,9 @@
 {
     "name": "BulkEditor.Editor",
+    "rootNamespace": "",
     "references": [
-        "GUID:43d14f4b85efe7f459e365594eddc6f9"
+        "GUID:43d14f4b85efe7f459e365594eddc6f9",
+        "GUID:102bc6560c5f6b54fb797d7d14a2a5b0"
     ],
     "includePlatforms": [
         "Editor"
