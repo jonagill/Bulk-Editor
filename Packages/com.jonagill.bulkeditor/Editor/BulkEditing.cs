@@ -417,9 +417,8 @@ namespace BulkEditor
                 var iterator = serializedObject.GetIterator();
                 while (iterator.Next(true))
                 {
-                    if (!iterator.isArray && iterator.GetEnumType() == enumType)
+                    if (!iterator.isArray && iterator.GetEnumType() == enumType && iterator.TryGetValue(out T enumValue))
                     {
-                        T enumValue = (T) iterator.GetEnumValue();
                         processReferenceCallback?.Invoke(enumValue, obj);
                     }
                 }

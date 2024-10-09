@@ -1,8 +1,9 @@
 {
   "dependencies": {
     "com.jonagill.bulkeditor": "file:com.jonagill.bulkeditor",
-    "com.jonagill.unityinternalaccess": "1.0.2",
+    "com.jonagill.unityinternalaccess": "1.0.3",
     "com.unity.ai.navigation": "1.1.5",
+    "com.unity.ide.rider": "3.0.31",
     "com.unity.ide.visualstudio": "2.0.22"
   },
   "scopedRegistries": [
